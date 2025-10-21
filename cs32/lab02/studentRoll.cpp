@@ -1,25 +1,65 @@
 #include <string>
 #include "studentRoll.h"
+#include <sstream>
 
 StudentRoll::StudentRoll() {
   head = tail = NULL;
 }
 
 void StudentRoll::insertAtTail(const Student &s) {
-  // STUB
+  Node *n = new Node; 
+  n->s = new Student(s); 
+  n -> next = NULL; 
+
+  if(head == NULL) {
+      head = n; 
+      tail = n; 
+  }
+  else {
+      tail->next = n; 
+      tail = n; 
+  }
 }
 
 std::string StudentRoll::toString() const {
-  return "stub";
+    std::ostringstream oss;
+    Node* curr = head; 
+    bool beg = true; //beg = beginning of LL
+    oss << "["; 
+    while(curr != NULL) {
+        if(!beg) {    //In order to get format right
+            oss << ","; 
+        }
+        else {
+            beg = false; 
+        }
+        oss << curr -> s -> toString();
+        curr = curr -> next; 
+    }
+    oss << "]";
+    return oss.str();
 }
 
 StudentRoll::StudentRoll(const StudentRoll &orig) {
-  // STUB
-  head = tail = NULL;
+  head = NULL;
+  tail = NULL;
+  Node* curr = orig.head; 
+  while(curr != NULL) {
+      insertAtTail(*(curr->s));
+      curr = curr -> next;
+  }
 }
 
 StudentRoll::~StudentRoll() {
-  // STUB
+  Node* curr = head; 
+  while (curr != NULL) {
+      Node* next = curr -> next; 
+      delete curr -> s; 
+      delete curr; 
+      curr = next; 
+  }
+  head = NULL; 
+  tail = NULL;
 }
 
 StudentRoll & StudentRoll::operator =(const StudentRoll &right ) {
@@ -32,6 +72,20 @@ StudentRoll & StudentRoll::operator =(const StudentRoll &right ) {
 
   // TODO... Here is where there is code missing that you need to 
   // fill in...
+  Node* curr = head; 
+  while(curr != NULL){
+      Node *next = curr -> next; 
+      delete curr -> s; 
+      delete curr; 
+      curr = next; 
+  }
+  head = NULL;
+  tail = NULL;
+  curr = right.head; 
+  while(curr != NULL) {
+      insertAtTail(*(curr->s));
+      curr = curr -> next;
+  }
 
 
   // KEEP THE CODE BELOW THIS LINE
